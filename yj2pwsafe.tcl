@@ -53,18 +53,20 @@ proc ParsePasswordFile {path} {
 
 
 # require at least one password file
-if {$argc < 3} {
-	puts stderr "$argv0 DB_PATH DB_PASSWORD PW_FILE \[PW_FILE ...\]"
+if {$argc < 2} {
+	puts stderr "$argv0 DB_PATH PW_FILE \[PW_FILE ...\]"
 	exit
 }
 
 # load or create a pwsafe database 
 set dbpath [lindex $argv 0]
-set dbpw [lindex $argv 1]
+puts -nonewline stdout "Password for $dbpath: "
+flush stdout
+set dbpw [gets stdin]
 set db [GetPasswordSafeDatabase $dbpath $dbpw]
 
 # add the password info from every specified file to the database
-for {set i 2} {$i < [llength $argv]} {incr i} {
+for {set i 1} {$i < [llength $argv]} {incr i} {
 	AddPasswordItem $db {*}[ParsePasswordFile [lindex $argv $i]]
 }
 
