@@ -3,6 +3,8 @@ package require Itcl
 package require sha256
 package require iblowfish
 package require itwofish
+package require msgcat
+namespace import msgcat::*
 
 #
 # ----------------------------------------------------------------------
