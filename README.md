@@ -17,6 +17,8 @@ Here's an example. `foo` is the Password Safe database, `passwords` is a folder 
 
 Note that if you add passwords to an existing Password Safe database, any pre-existing items in the database will be retained. However, the database is always written using version 3 of the Password Safe format (easily changed in the `SavePasswordSafeDatabase` procedure if necessary).
 
+Last but not least, delete the interim clear text password files exported from Yojimbo! 
+
 ## Yojimbo Password Item Export Format
 
 Technically, yj2pwsafe can import passwords from any source that writes this exact file format:
@@ -27,7 +29,7 @@ Technically, yj2pwsafe can import passwords from any source that writes this exa
 	Password: PASSWORD
 	Comments: NOTES
 	
-Every line must be present and formatted exactly as shown, but any field value (represented by the capitalized terms) may be left blank. The `NOTES` field extends to the end of the file, and may therefore span multiple lines. It is assumed that other fields will not span multiple lines.
+Every line must be present and formatted exactly as shown, but any field value (represented by the ALL-CAPS terms) may be left blank. The `NOTES` field extends to the end of the file, and may therefore span multiple lines. It is assumed that other fields will not span multiple lines.
 
 ## Requirements
 
