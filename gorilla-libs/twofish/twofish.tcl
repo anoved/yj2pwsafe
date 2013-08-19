@@ -104,37 +104,8 @@ itcl::class ::itwofish::itwofish {
 
     private common MDS_GF_FDBK 0x169
 
-    # ---------------------------------------------------
-    # load a compiled C extension for f32 - if one exists
-    # ---------------------------------------------------
-
-    set machine $::tcl_platform(machine)
-    set os      $::tcl_platform(os)
-
-    # regularize machine name for ix86 variants
-    switch -glob -- $machine {
-      intel -
-      i*86* { set machine x86 }
-    }
-		
-    # regularize os name for Windows variants
-    switch -glob -- $os {
-      Windows* { set os Windows }
-    }
-
-		# since Tcl 8.5.9.1: Darwin >= 10.5
-		
-# puts stderr "twofish: gorilla::Dir = $gorilla::Dir"
-    set lib [ file join $::gorilla::Dir twofish f32-$os-$machine[ info sharedlibextension ] ]
-#    puts stderr "twofish: lib -> $lib"
-
-    if { [ catch { load $lib f32 } ] } {
-# 	puts stderr "twofish: Using Tcl only f32"
-      set callmap [ list -m:f32- f32 ]
-    } else {
-# 	puts stderr "twofish: Using Critcl f32"
-      set callmap [ list -m:f32- f32_critcl ]
-    }
+	# excised f32-critcl implementation; simply using Tcl implementation below
+    set callmap [ list -m:f32- f32 ]
 
 # ---------------------------------------------------
 
