@@ -10,10 +10,10 @@ First, export some passwords from Yojimbo: select the desired password items, se
 
 The yj2pwsafe script takes two or more command line arguments: first, the path to the Password Safe database to add passwords to (which will be created if it does not exist), followed by the path to one or more password files exported by Yojimbo. You will be prompted to enter your Password Safe database password. The script must be run from the directory containing the script and the `gorilla-libs` subdirectory.
 
-Here's an example. `foo` is the Password Safe database, `passwords` is a folder containing only Yojimbo password text files, and `bar` is the Password Safe database password.
+Here's an example. `foo` is the Password Safe database and `passwords` is a folder containing only Yojimbo password text files. The database password is entered when prompted.
 
 	> ./yj2pwsafe.tcl foo passwords/*.txt
-	Password for foo: bar
+	Password for foo: 
 
 Note that if you add passwords to an existing Password Safe database, any pre-existing items in the database will be retained. However, the database is always written using version 3 of the Password Safe format (easily changed in the `SavePasswordSafeDatabase` procedure if necessary).
 
