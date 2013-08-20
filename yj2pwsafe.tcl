@@ -62,7 +62,10 @@ if {$argc < 2} {
 set dbpath [lindex $argv 0]
 puts -nonewline stdout "Password for $dbpath: "
 flush stdout
+exec /bin/stty -echo echonl
 set dbpw [gets stdin]
+exec /bin/stty echo
+
 set db [GetPasswordSafeDatabase $dbpath $dbpw]
 
 # add the password info from every specified file to the database
