@@ -4,24 +4,69 @@ This script adds password items exported from [Yojimbo](http://barebones.com/pro
 
 ## Usage
 
-First, export some passwords from Yojimbo: select the desired password items, select "Export…" from the File menu, enter your Yojimbo password as prompted, and choose a folder to contain the exported password items. I recommend choosing an empty new folder, since a separate text file will be created for each password.
+---
 
-(Passwords exported from Yojimbo are stored in clear text, so consider your export location carefully; otherwise, automatic backup services such as Dropbox or Time Machine may retain clear text copies of all your passwords.)
+### 1
 
-The yj2pwsafe script takes two or more command line arguments: first, the path to the Password Safe database to add passwords to (which will be created if it does not exist), followed by the path to one or more password files exported by Yojimbo. You will be prompted to enter your Password Safe database password. The script must be run from the directory containing the script and the `gorilla-libs` subdirectory.
+First, export some password items from Yojimbo. Select your password items and choose *Export…* from the *File* menu:
 
-Here's an example. `foo` is the Password Safe database and `passwords` is a folder containing only Yojimbo password text files. The database password is entered when prompted.
+![Export password items from Yojimbo](https://raw.github.com/anoved/yj2pwsafe/master/images/1-yojimbo-export.png)
 
-	> ./yj2pwsafe.tcl foo passwords/*.txt
-	Password for foo: 
+You'll be prompted to enter your Yojimbo password (possibly a few times) and asked to choose a folder to contain the exported password items. I recommend creating an empty new folder, for instance named *Exported Yojimbo Passwords*. Consider your export location carefully, as exported passwords are stored as plain text and are visible to anyone with access to your file system. Furthermore, automated backup tools like Dropbox or Time Machine may retain archived copies of files stored under their jurisdiction.
 
-Note that if you add passwords to an existing Password Safe database, any pre-existing items in the database will be retained. However, the database is always written using version 3 of the Password Safe format (easily changed in the `SavePasswordSafeDatabase` procedure if necessary).
+---
 
-Last but not least, delete the interim clear text password files exported from Yojimbo! 
+### 2
+
+[Download this repository](https://github.com/anoved/yj2pwsafe/archive/master.zip) (.zip), unzip it, and run `yj2pwsafe.app`:
+
+![Run yj2pwsafe.app](https://raw.github.com/anoved/yj2pwsafe/master/images/2-yj2pwsafe-files.png)
+
+This "app" is just a bundle of scripts you can [browse on GitHub](https://github.com/anoved/yj2pwsafe/tree/master/yj2pwsafe.app/Contents/Resources/Scripts) and an Applescript wrapper you can examine by opening the app in Applescript Editor.
+
+---
+
+### 3
+
+The `yj2pwsafe` app simply presents a series of dialogs. First, choose the password items exported in step 1:
+
+![Select exported password items](https://raw.github.com/anoved/yj2pwsafe/master/images/3-select-exported.png)
+
+---
+
+### 4
+
+Next, specify which Password Safe database to add the passwords to. If you specify a new file, it will be created. If you choose to overwrite an existing Password Safe database, the original contents will be loaded first and included in the output.
+
+![Specify Password Safe database](https://raw.github.com/anoved/yj2pwsafe/master/images/4-select-database.png)
+
+---
+
+### 5
+
+Finally, enter the master password for the database specified in step 4. If it is a new file, this sets the master password. If you are adding to an existing database, you must provide the correct master password.
+
+![Enter database master password](https://raw.github.com/anoved/yj2pwsafe/master/images/5-database-password.png)
+
+The `yj2pwsafe` app will quit once the passwords are added to the database. Unfortunately, the script currently performs no error checking, so if anything goes wrong, its behavior is… undefined. Please do [report](https://github.com/anoved/yj2pwsafe/issues?state=open) such problems in as much detail as possible.
+
+Last but not least, delete the interim clear text password files you exported from Yojimbo!
+
+---
+
+## Command Line Usage
+
+The instructions above apply to the Applescript app at the top level of this repository. However, this app is just a wrapper that presents a few dialogs to get input for a platform-independent Tcl script that does the actual import. You can invoke the Tcl script directly if you prefer. It is called `yj2pwsafe.tcl` and is located in the [`Contents/Resources/Scripts` subdirectory](https://github.com/anoved/yj2pwsafe/tree/master/yj2pwsafe.app/Contents/Resources/Scripts) of the app bundle. It relies on the packages in the `gorilla-libs` folder found in the same directory.
+
+The command line syntax of `yj2pwsafe.tcl` is as follows:
+
+	yj2pwsafe.tcl DB_FILE PW_FILE [PW_FILE ...]
+
+The first argument, `DB_FILE`, is the path to the Password Safe database. Each remaining argument (`PW_FILE ...`) is interpreted as the path to an exported password item file. The master password for the database is read from standard input; a prompt will appear if you run the script from a terminal.
 
 ## Yojimbo Password Item Export Format
 
-Technically, yj2pwsafe can import passwords from any source that writes this exact file format:
+Technically, yj2pwsafe can import passwords from any source that produces files formatted like this:
 
 	Name: NAME
 	Location: URL
@@ -37,7 +82,7 @@ yj2pwsafe was tested on Mac OS X 10.8.4 with password items exported from Yojimb
 
 ## Acknowledgements
 
-yj2pwsafe is based on select [Password Gorilla](https://github.com/zdia/gorilla/wiki) code by Frank Pilhofer, redistributed with minor modifications in the `gorilla-libs` directory. This attribution does not constitute endorsement.
+yj2pwsafe is based on select [Password Gorilla](https://github.com/zdia/gorilla/wiki) code by Frank Pilhofer, redistributed with minor modifications in the [`gorilla-libs`](https://github.com/anoved/yj2pwsafe/tree/master/yj2pwsafe.app/Contents/Resources/Scripts/gorilla-libs) directory. This attribution does not constitute endorsement.
 
 ## License
 
