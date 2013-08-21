@@ -60,11 +60,18 @@ if {$argc < 2} {
 
 # load or create a pwsafe database 
 set dbpath [lindex $argv 0]
-puts -nonewline stdout "Password for $dbpath: "
-flush stdout
-exec /bin/stty -echo echonl
-set dbpw [gets stdin]
-exec /bin/stty echo
+
+# the -mode option will only be present in stdin's config
+# if it is some sort of terminal; if absent, just read pw.
+if {[dict exists [fconfigure stdin] -mode]} {
+	puts -nonewline stdout "Password for $dbpath: "
+	flush stdout
+	exec /bin/stty -echo echonl
+	set dbpw [gets stdin]
+	exec /bin/stty echo
+} else {
+	set dbpw [gets stdin]
+}
 
 set db [GetPasswordSafeDatabase $dbpath $dbpw]
 
