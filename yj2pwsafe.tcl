@@ -1,6 +1,6 @@
 #!/usr/bin/tclsh
 
-lappend auto_path gorilla-libs
+lappend auto_path [file join [file dirname [info script]] gorilla-libs]
 package require pwsafe
 
 # load a pwsafe database from file or create a new one if no such file exists
