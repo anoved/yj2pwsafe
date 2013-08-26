@@ -40,13 +40,9 @@ proc AddPasswordItem {db name location account password comments} {
 # return a list of password info read from a Yojimbo password item export file
 proc ParsePasswordFile {path} {
 	set f [open $path]
-	regexp {^Name: (.*)$} [gets $f] match name
-	regexp {^Location: (.*)$} [gets $f] match location
-	regexp {^Account: (.*)$} [gets $f] match account
-	regexp {^Password: (.*)$} [gets $f] match password
-	# assuming only the comments field may contain multiple lines
-	regexp {^Comments: (.*)$} [read $f nonewline] match comments
+	set content [read $f nonewline]
 	close $f
+	regexp {^Name: (.*)\nLocation: (.*)\nAccount: (.*)\nPassword: (.*)\nComments: (.*)$} $content match name location account password comments
 	return [list $name $location $account $password $comments]
 }
 
