@@ -60,9 +60,9 @@ The instructions above apply to the Applescript app at the top level of this rep
 
 The command line syntax of `yj2pwsafe.tcl` is as follows:
 
-	yj2pwsafe.tcl DB_FILE PW_FILE [PW_FILE ...]
+	yj2pwsafe.tcl DB_FILE YJ_FILE [YJ_FILE ...]
 
-The first argument, `DB_FILE`, is the path to the Password Safe database. Each remaining argument (`PW_FILE ...`) is interpreted as the path to an exported password or serial number item file. The master password for the database is read from standard input; a prompt will appear if you run the script from a terminal.
+The first argument, `DB_FILE`, is the path to the Password Safe database. Each remaining argument (`YJ_FILE ...`) is interpreted as the path to a password or serial number item exported from Yojimbo. The master password for the database is read from standard input; a prompt will appear if you run the script from a terminal.
 
 ## Yojimbo Password Item Export Format
 
@@ -83,7 +83,7 @@ Additionally, yj2pwsafe can import serial numbers from any source that exports f
 	Serial Number: SERIAL
 	Comments: NOTES
 
-When importing serial number items, yj2pwsafe will append the `OWNER`, `EMAIL`, and `ORGANIZATION` values (if defined) to the `NOTES` field. The `URL` and `PASSWORD` fields of serial number items will be left blank.
+When importing serial number items, yj2pwsafe will append the `OWNER`, `EMAIL`, and `ORGANIZATION` values (if defined) to the `NOTES` field. The `URL` and `USERNAME` fields of serial number items will be left blank and the `SERIAL` number will be stored as the `PASSWORD`.
 
 Every line must be present and formatted exactly as shown, but any field value (represented by the ALL-CAPS terms) may be left blank. The `NOTES` field extends to the end of the file, and may therefore span multiple lines. It is assumed that other fields will not span multiple lines.
 
