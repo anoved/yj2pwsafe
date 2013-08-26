@@ -38,12 +38,27 @@ proc AddPasswordItem {db name location account password comments} {
 }
 
 # return a list of password info read from a Yojimbo password item export file
-proc ParsePasswordFile {path} {
+proc ParseInputFile {path} {
 	set f [open $path]
 	set content [read $f nonewline]
 	close $f
-	regexp {^Name: (.*)\nLocation: (.*)\nAccount: (.*)\nPassword: (.*)\nComments: (.*)$} $content match name location account password comments
-	return [list $name $location $account $password $comments]
+	if {[regexp {^Name: (.*)\nLocation: (.*)\nAccount: (.*)\nPassword: (.*)\nComments: (.*)$} $content match name location account password comments] == 1} {
+		set results [list $name $location $account $password $comments]
+	} elseif {[regexp {^Product Name: (.*)\nOwner Name: (.*)\nEmail Address: (.*)\nOrganization: (.*)\nSerial Number: (.*)\nComments: (.*)$} $content match name owner email organization serial comments] == 1} {
+		if {$owner ne {}} {
+			append comments \n "Owner Name: $owner"
+		}
+		if {$email ne {}} {
+			append comments \n "Email Address: $email"
+		}
+		if {$organization ne {}} {
+			append comments \n "Organization: $organization"
+		}
+		set results [list $name {} {} $serial $comments]
+	} else {
+		error "Unrecognized content format in $path"
+	}
+	return $results
 }
 
 
@@ -73,7 +88,9 @@ set db [GetPasswordSafeDatabase $dbpath $dbpw]
 
 # add the password info from every specified file to the database
 for {set i 1} {$i < [llength $argv]} {incr i} {
-	AddPasswordItem $db {*}[ParsePasswordFile [lindex $argv $i]]
+	if {[catch {AddPasswordItem $db {*}[ParseInputFile [lindex $argv $i]]} result]} {
+		puts stderr $result
+	}
 }
 
 # write the updated database to disk

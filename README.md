@@ -1,6 +1,6 @@
 # yj2pwsafe
 
-This script adds password items exported from [Yojimbo](http://barebones.com/products/yojimbo/) to a [Password Safe](http://pwsafe.org/)-compatible database. The Password Safe database format is compatible with [many programs](http://pwsafe.org/relatedprojects.shtml) and is based on [encryption](http://www.schneier.com/blowfish.html) [algorithms](http://www.schneier.com/twofish.html) developed in part by [Bruce Schneier](http://www.schneier.com/about.html).
+This script adds password or serial number items exported from [Yojimbo](http://barebones.com/products/yojimbo/) to a [Password Safe](http://pwsafe.org/)-compatible database. The Password Safe database format is compatible with [many programs](http://pwsafe.org/relatedprojects.shtml) and is based on [encryption](http://www.schneier.com/blowfish.html) [algorithms](http://www.schneier.com/twofish.html) developed in part by [Bruce Schneier](http://www.schneier.com/about.html).
 
 ## Usage
 
@@ -8,11 +8,11 @@ This script adds password items exported from [Yojimbo](http://barebones.com/pro
 
 ### 1
 
-First, export some password items from Yojimbo. Select your password items and choose *Export…* from the *File* menu:
+First, export some password or serial number items from Yojimbo. Select your items and choose *Export…* from the *File* menu:
 
 ![Export password items from Yojimbo](https://raw.github.com/anoved/yj2pwsafe/master/images/1-yojimbo-export.png)
 
-You'll be prompted to enter your Yojimbo password (possibly a few times) and asked to choose a folder to contain the exported password items. I recommend creating an empty new folder, for instance named *Exported Yojimbo Passwords*. Consider your export location carefully, as exported passwords are stored as plain text and are visible to anyone with access to your file system. Furthermore, automated backup tools like Dropbox or Time Machine may retain archived copies of files stored under their jurisdiction.
+You'll be prompted to enter your Yojimbo password (possibly a few times) and asked to choose a folder to contain the exported items. I recommend creating an empty new folder, for instance named *Exported Yojimbo Passwords*. Consider your export location carefully, as exported items (including passwords) are stored in plain text and are visible to anyone with access to your file system. Furthermore, automated backup tools like Dropbox or Time Machine may retain archived copies of files stored under their jurisdiction.
 
 ---
 
@@ -28,7 +28,7 @@ This "app" is just a bundle of scripts you can [browse on GitHub](https://github
 
 ### 3
 
-The `yj2pwsafe` app simply presents a series of dialogs. First, choose the password items exported in step 1:
+The `yj2pwsafe` app simply presents a series of dialogs. First, choose the items exported in step 1:
 
 ![Select exported password items](https://raw.github.com/anoved/yj2pwsafe/master/images/3-select-exported.png)
 
@@ -36,7 +36,7 @@ The `yj2pwsafe` app simply presents a series of dialogs. First, choose the passw
 
 ### 4
 
-Next, specify which Password Safe database to add the passwords to. If you specify a new file, it will be created. If you choose to overwrite an existing Password Safe database, the original contents will be loaded first and included in the output.
+Next, specify which Password Safe database to add the items to. If you specify a new file, it will be created. If you choose to overwrite an existing Password Safe database, the original contents will be loaded first and included in the output.
 
 ![Specify Password Safe database](https://raw.github.com/anoved/yj2pwsafe/master/images/4-select-database.png)
 
@@ -48,9 +48,9 @@ Finally, enter the master password for the database specified in step 4. If it i
 
 ![Enter database master password](https://raw.github.com/anoved/yj2pwsafe/master/images/5-database-password.png)
 
-The `yj2pwsafe` app will quit once the passwords are added to the database. Unfortunately, the script currently performs no error checking, so if anything goes wrong, its behavior is… undefined. Please do [report](https://github.com/anoved/yj2pwsafe/issues?state=open) such problems in as much detail as possible.
+The `yj2pwsafe` app will quit once the passwords or serial numbers are added to the database. Unfortunately, the script currently performs no error checking, so if anything goes wrong, its behavior is… undefined. Please do [report](https://github.com/anoved/yj2pwsafe/issues?state=open) such problems in as much detail as possible.
 
-Last but not least, delete the interim clear text password files you exported from Yojimbo!
+Last but not least, delete the interim clear text password or serial number files you exported from Yojimbo!
 
 ---
 
@@ -62,18 +62,29 @@ The command line syntax of `yj2pwsafe.tcl` is as follows:
 
 	yj2pwsafe.tcl DB_FILE PW_FILE [PW_FILE ...]
 
-The first argument, `DB_FILE`, is the path to the Password Safe database. Each remaining argument (`PW_FILE ...`) is interpreted as the path to an exported password item file. The master password for the database is read from standard input; a prompt will appear if you run the script from a terminal.
+The first argument, `DB_FILE`, is the path to the Password Safe database. Each remaining argument (`PW_FILE ...`) is interpreted as the path to an exported password or serial number item file. The master password for the database is read from standard input; a prompt will appear if you run the script from a terminal.
 
 ## Yojimbo Password Item Export Format
 
-Technically, yj2pwsafe can import passwords from any source that produces files formatted like this:
+Technically, yj2pwsafe can import passwords from any source that exports files formatted like this:
 
 	Name: NAME
 	Location: URL
 	Account: USERNAME
 	Password: PASSWORD
 	Comments: NOTES
-	
+
+Additionally, yj2pwsafe can import serial numbers from any source that exports files formatted like this:
+
+	Product Name: NAME
+	Owner Name: OWNER
+	Email Address: EMAIL
+	Organization: ORGANIZATION
+	Serial Number: SERIAL
+	Comments: NOTES
+
+When importing serial number items, yj2pwsafe will append the `OWNER`, `EMAIL`, and `ORGANIZATION` values (if defined) to the `NOTES` field. The `URL` and `PASSWORD` fields of serial number items will be left blank.
+
 Every line must be present and formatted exactly as shown, but any field value (represented by the ALL-CAPS terms) may be left blank. The `NOTES` field extends to the end of the file, and may therefore span multiple lines. It is assumed that other fields will not span multiple lines.
 
 ## Requirements
